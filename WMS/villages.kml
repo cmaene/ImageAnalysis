@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="root_doc">
+    <Schema id="villages.schema">
+      <SimpleField name="osm_id" type="string"/>
+      <SimpleField name="type" type="string"/>
+      <SimpleField name="x" type="string"/>
+      <SimpleField name="y" type="string"/>
+    </Schema>
+    <Document id="villages">
+      <name>villages</name>
+      <Placemark id="villages.1">
+        <name>Bara Daldali</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245738988</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.5947</SimpleData>
+            <SimpleData name="y">25.8267</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.5947,25.8267,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.2">
+        <name>Burakek</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245740681</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.1893</SimpleData>
+            <SimpleData name="y">25.9462</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.1893,25.9462,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.3">
+        <name>Baghuliaghat</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245742040</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.1969017</SimpleData>
+            <SimpleData name="y">26.0564147</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.1969017,26.0564147,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.4">
+        <name>Eksekgaon</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245746090</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.2358</SimpleData>
+            <SimpleData name="y">26.2757</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.2358,26.2757,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.5">
+        <name>Garampani</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245746478</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.8600258</SimpleData>
+            <SimpleData name="y">26.2962625</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.8600258,26.2962625,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.6">
+        <name>Arlangbati</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245747585</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.5417</SimpleData>
+            <SimpleData name="y">26.402</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.5417,26.402,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.7">
+        <name>Kaziranga</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">245750035</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.2415</SimpleData>
+            <SimpleData name="y">26.5787</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.2415,26.5787,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.8">
+        <name>Howraghat</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">1495287081</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.0358027</SimpleData>
+            <SimpleData name="y">26.112822</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.0358027,26.112822,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.9">
+        <name>Kohora</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">1681545138</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.4105813</SimpleData>
+            <SimpleData name="y">26.5869979</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.4105813,26.5869979,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.10">
+        <name>Amguri</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">1692837276</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.0661787</SimpleData>
+            <SimpleData name="y">26.5788721</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.0661787,26.5788721,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="villages.11">
+        <name>Amlakhi</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#villages.schema">
+            <SimpleData name="osm_id">2885039362</SimpleData>
+            <SimpleData name="type">village</SimpleData>
+            <SimpleData name="x">93.4904099</SimpleData>
+            <SimpleData name="y">25.9646841</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            93.4904099,25.9646841,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+  </Document>
+</kml>
