@@ -81,4 +81,4 @@ sqlite3 training.sqlite < createTable.sql
 pkextract -i landsat8toafall_cf5.tif -s training.sqlite -r median -polygon -srcnodata 0 -bndnodata 0 -t 50 -f SQLite -o training_features.sqlite
 
 # supervised classification with SVM (Support Vector Machine)
-pksvm -i landsat8toafall_cf5.tif -t traing_features.sqalite -nodata 0 -o landsat8toafall_cf5_supervised.tif
+pksvm -i landsat8toafall_cf5.tif -t training_features.sqlite -nodata 0 -o landsat8toafall_cf5_supervised.tif
