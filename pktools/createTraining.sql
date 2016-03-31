@@ -1,3 +1,5 @@
+-- ref: http://www.gaia-gis.it/gaia-sins/spatialite-sql-4.2.0.html
+
 --need to upload "spatialite" module in SQLite3
 .header on
 .explain on
@@ -10,17 +12,20 @@
 
 --DATA CHECKING --------START
 
+--make sure of spatiality, plus type: FDO/OGR
 select CheckSpatialMetaData();
 
+--check SRS
 select * from spatial_ref_sys;
 
 --check tables -- what tables are inside..?
 .tables
 
+--check geometry column, notice geometry type is FDO/OGR
 select * from geometry_columns;
 
+--run basic queries, just to see it works
 select natural, count(natural), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolygons group by natural;
-
 select landuse, count(landuse), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolygons group by landuse;
 
 --DATA CHECKING --------DONE
