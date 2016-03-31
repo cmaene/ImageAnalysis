@@ -71,14 +71,16 @@ ogrinfo -so -al openstreet.sqlite
 cp openstreet.sqlite training.sqlite
 
 # run the SQL script
-sqlite3 training.sqlite < createTable.sql
+sqlite3 training.sqlite < createTraining.sql
 
 # -------------------------------------------------------
 # continue on training data creation
 # extract multispectral image values using the training labels
 # and then try SVM classification -
 # -------------------------------------------------------
+rm training_features.sqlite
 pkextract -i landsat8toafall_cf5.tif -s training.sqlite -r median -polygon -srcnodata 0 -bndnodata 0 -t 50 -f SQLite -o training_features.sqlite
 
 # supervised classification with SVM (Support Vector Machine)
+rm landsat8toafall_cf5_supervised.tif
 pksvm -i landsat8toafall_cf5.tif -t training_features.sqlite -nodata 0 -o landsat8toafall_cf5_supervised.tif

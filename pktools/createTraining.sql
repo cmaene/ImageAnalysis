@@ -9,8 +9,7 @@
 --select InitSpatialMetaData(); --unecessary since we know it's spatial
 
 -----------------------------------------------------------------------------------------------------
-
---DATA CHECKING --------START
+--DATA CHECKING --------
 
 --make sure of spatiality, plus type: FDO/OGR
 select CheckSpatialMetaData();
@@ -25,10 +24,8 @@ select * from spatial_ref_sys;
 select * from geometry_columns;
 
 --run basic queries, just to see it works
-select natural, count(natural), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolygons group by natural;
-select landuse, count(landuse), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolygons group by landuse;
-
---DATA CHECKING --------DONE
+select natural, count(natural), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolygons group by natural limit 5;
+select landuse, count(landuse), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolygons group by landuse limit 5;
 
 -----------------------------------------------------------------------------------------------------
 
@@ -38,8 +35,9 @@ select landuse, count(landuse), SUM(Area(GeomFromWKB(GEOMETRY))) from multipolyg
 drop table water;    --1
 drop table forest;   --2
 drop table farm;     --3
-drop table railway;  --4
-drop table building; --5
+drop table building; --4
+drop table railway;  --5
+drop table highway;  --6
 vacuum;
 -----------------------------------------------------------------------------------------------------
 
@@ -51,7 +49,7 @@ vacuum;
 create table water (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, natural VARCHAR, other_tags VARCHAR);
 
 --establish Geometry column
-select AddFDOGeometryColumn('water', 'GEOMETRY', 4326, 6, 2, 'WKB');
+select AddFDOGeometryColumn('water', 'geometry', 4326, 6, 2, 'WKB');
 
 --insert rows from existing table where natural="water" or other_tags like "%waterway%"
 insert into water(OGC_FID, natural, other_tags, geometry) select OGC_FID, natural, other_tags, geometry from multipolygons where natural="water" or other_tags like "%waterway%";
@@ -69,7 +67,7 @@ select label, count(label), SUM(Area(GeomFromWKB(geometry))) from water group by
 create table forest (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, landuse VARCHAR);
 
 --establish Geometry column
-select AddFDOGeometryColumn('forest', 'GEOMETRY', 4326, 6, 2, 'WKB');
+select AddFDOGeometryColumn('forest', 'geometry', 4326, 6, 2, 'WKB');
 
 --insert rows from existing table where landuse="forest" or natural="wood";
 insert into forest(OGC_FID, landuse, geometry) select OGC_FID, landuse, geometry from multipolygons where landuse="forest" or natural="wood";
@@ -87,7 +85,7 @@ select label, count(label), SUM(Area(GeomFromWKB(geometry))) from forest group b
 create table farm (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, landuse VARCHAR);
 
 --establish Geometry column
-select AddFDOGeometryColumn('farm', 'GEOMETRY', 4326, 6, 2, 'WKB');
+select AddFDOGeometryColumn('farm', 'geometry', 4326, 6, 2, 'WKB');
 
 --insert rows from existing table where landuse="farm" or landuse="farmland";
 insert into farm(OGC_FID, landuse, geometry) select OGC_FID, landuse, geometry from multipolygons where landuse="farm" or landuse="farmland";
@@ -101,42 +99,88 @@ select label, count(label), SUM(Area(GeomFromWKB(geometry))) from farm group by 
 
 -----------------------------------------------------------------------------------------------------
 
---create a blank "railway" table
-create table railway (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, landuse VARCHAR);
-
---establish Geometry column
-select AddFDOGeometryColumn('railway', 'GEOMETRY', 4326, 6, 2, 'WKB');
-
---insert rows from existing table where landuse="railways";
-insert into railway(OGC_FID, landuse, geometry) select OGC_FID, landuse, geometry from multipolygons where landuse="railway";
-
---add a new column - training label
-alter table railway add column label integer;
-update railway set label=4;
-
---check to see if labels are created correctly
-select label, count(label), SUM(Area(GeomFromWKB(geometry))) from railway group by label;
-
------------------------------------------------------------------------------------------------------
-
 --create a blank "building" table
 create table building (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, building VARCHAR);
 
 --establish Geometry column
-select AddFDOGeometryColumn('building', 'GEOMETRY', 4326, 6, 2, 'WKB');
+select AddFDOGeometryColumn('building', 'geometry', 4326, 6, 2, 'WKB');
 
---insert rows from existing table where building="yes";
-insert into building(OGC_FID, building, geometry) select OGC_FID, building, geometry from multipolygons where building="yes";
+--insert rows from existing table where building="yes", limit to 200 features (too many buildings in source);
+insert into building(OGC_FID, building, geometry) select OGC_FID, building, geometry from multipolygons where building="yes" limit 200;
 
 --add a new column - training label
 alter table building add column label integer;
-update building set label=5;
+update building set label=4;
 
 --check to see if labels are created correctly
 select label, count(label), SUM(Area(GeomFromWKB(geometry))) from building group by label;
 
 -----------------------------------------------------------------------------------------------------
 
+--create a blank "railway" table
+create table railway (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, landuse VARCHAR);
+
+--establish Geometry column
+select AddFDOGeometryColumn('railway', 'geometry', 4326, 6, 2, 'WKB');
+
+--insert rows from existing table where landuse="railways";
+insert into railway(OGC_FID, landuse, geometry) select OGC_FID, landuse, geometry from multipolygons where landuse="railway";
+
+--add a new column - training label
+alter table railway add column label integer;
+update railway set label=5;
+
+--check to see if labels are created correctly
+select label, count(label), SUM(Area(GeomFromWKB(geometry))) from railway group by label;
+
+-----------------------------------------------------------------------------------------------------
+
+--creating highway training label is tricky as source for highways are lines, not polygons
+
+--create table - instead of ".loadshp lines_osm shpline UTF8 4326" (works directly in spatialite)
+--though "TEXT" is now replaced by VARCHAR
+CREATE TABLE "lines" (
+"OGC_FID" INTEGER PRIMARY KEY AUTOINCREMENT,
+"osm_id" VARCHAR,
+"name" VARCHAR,
+"highway" VARCHAR,
+"waterway" VARCHAR,
+"aerialway" VARCHAR,
+"barrier" VARCHAR,
+"man_made" VARCHAR,
+"other_tags" VARCHAR);
+
+--establish Geometry column - note: linestring=2
+select AddFDOGeometryColumn('lines', 'geometry', 4326, 2, 2, 'WKB');
+
+--import lines shapefile. Note: I had to drop "other_tags" in shp prior to importing
+--otherwise, kept getting "invalid character sequence", something bad in "other_tags"
+create virtual table shpline using VirtualShape("lines_osm", "utf-8", 4326);
+
+--insert from the VirtualShape table
+insert into lines (osm_id, name, highway, waterway, aerialway, barrier, man_made, geometry) select osm_id, name, highway, waterway, aerialway, barrier, man_made, geometry from shpline WHERE highway="primary";
+--select * from lines where highway="primary" limit 5; --just checking
+
+--create a blank "highway" table
+create table highway (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, highway VARCHAR);
+
+--establish Geometry column - note: multipolygons=6
+select AddFDOGeometryColumn('highway', 'geometry', 4326, 6, 2, 'WKB');
+
+--insert rows from lines (highways only) but buffered & unioned/dissolved highway polygon, 0.000025=approx.5m (2.5m*2) road width;
+insert into highway(OGC_FID, geometry) select OGC_FID, ST_UNION(ST_Buffer(geometry, 0.000025)) from lines;
+
+--add a new column - training label
+alter table highway add column label integer;
+update highway set label=6;
+
+--check to see if labels are created correctly
+select label, count(label), SUM(Area(GeomFromWKB(geometry))) from highway group by label;
+
+-----------------------------------------------------------------------------------------------------
+
 drop table multipolygons;
+drop table lines;
 vacuum;
+
 
