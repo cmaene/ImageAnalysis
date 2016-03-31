@@ -167,8 +167,9 @@ create table highway (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, highway VARCHAR
 --establish Geometry column - note: multipolygons=6
 select AddFDOGeometryColumn('highway', 'geometry', 4326, 6, 2, 'WKB');
 
---insert rows from lines (highways only) but buffered & unioned/dissolved highway polygon, 0.000025=approx.5m (2.5m*2) road width;
-insert into highway(OGC_FID, geometry) select OGC_FID, ST_UNION(ST_Buffer(geometry, 0.000025)) from lines;
+--insert rows from lines (highways only) but buffered highways, 0.000025=approx.5m (2.5m*2) road width;
+--insert into highway(OGC_FID, geometry) select OGC_FID, ST_UNION(ST_Buffer(geometry, 0.000025)) from lines; --better not to dissolve for collecting training data..
+insert into highway(OGC_FID, geometry) select OGC_FID, ST_Buffer(geometry, 0.000025) from lines;
 
 --add a new column - training label
 alter table highway add column label integer;
