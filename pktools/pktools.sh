@@ -84,3 +84,20 @@ pkextract -i landsat8toafall_cf5.tif -s training.sqlite -r median -polygon -srcn
 # supervised classification with SVM (Support Vector Machine)
 rm landsat8toafall_cf5_supervised.tif
 pksvm -i landsat8toafall_cf5.tif -t training_features.sqlite -nodata 0 -o landsat8toafall_cf5_supervised.tif
+
+# -------------------------------------------------------
+# optional: 
+# add color-relief to 1-band tif using gdaldem
+# ref: http://www.gdal.org/gdaldem.html#gdaldem_color_relief
+# -------------------------------------------------------
+rm colormap.txt
+touch colormap.txt # create a text file with value-color list
+colors=(blue green yellow grey orange red)
+cnt=1
+for c in ${colors[@]}; do
+    colmap=`echo $cnt $c`
+    echo $colmap >> colormap.txt
+    let cnt=cnt+1
+done
+# apply gdaldem color-relief
+gdaldem color-relief landsat8toafall_cf5_supervised.tif colormap.txt landsat8toafall_cf5_supervisedcolor.tif
