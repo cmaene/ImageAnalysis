@@ -7,7 +7,8 @@ pktools is a set of handy tools, system utilities written in C++, for manipulati
 * Bash:              download and process training "base" data from OpenStreetMap.
 * SQLite/Spatialite: create training labels (script: createTraining.sql)
 * pktools/pkextract:         extract multispectral imagery values with the training data
-* pktools/pksvm:             create a supervised model and applied to the input imagery (fall) image.. (example: supervised_xx.png)
+* pktools/pksvm:             create a supervised model and applied to the input imagery (fall) image.. (example: supervised_.png)
+* gdaldem:           (optional) add color scheme to the 1-band supervised landuse image.
 
 ####References:
 [pktools home page](http://pktools.nongnu.org/html/index.html)
