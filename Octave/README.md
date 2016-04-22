@@ -4,7 +4,7 @@
 #### Steps
 All steps are in "classification.sh"...
 
-#### Referenences:
+#### References:
 [LIBSVM -- A Library for Support Vector Machines](https://www.csie.ntu.edu.tw/~cjlin/libsvm/)
 
 [Output example - libsvm_satellite_predicted_georef.tif - in PNG](output_example.png)
