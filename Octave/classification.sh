@@ -60,7 +60,7 @@ echo "best Gausian Kernel is: " $bestg
 
 cd ../
 # run another octave
-octave predict2grid.m libsvm_satellite.predict
+octave predict2grid.m libsvm_satellite.predict $nrow $ncol
 
 # -------------------------------------------------------
 # add color-relief to 1-band tif using gdaldem

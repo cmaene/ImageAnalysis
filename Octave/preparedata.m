@@ -66,13 +66,13 @@ labels = traindata_rsort(:, 1); % labels from the 1st column
 %features = traindata_rsort(:, 2:end); 
 features = traindata_rsort(:, 2:end-2); 
 features_sparse = sparse(features); % features must be in a sparse matrix
-% train = first 526 rows out of 926 - give more for training
-train_label=labels(1:463,:);
-train_data=features_sparse(1:463,:);
+% train = first 626 rows out of 926 - give more for training
+train_label=labels(1:626,:);
+train_data=features_sparse(1:626,:);
 libsvmwrite('libsvm_train', train_label, train_data);
-% test = next 400 rows
-test_label=labels(464:926,:);
-test_data=features_sparse(464:926,:);
+% test = next 300 rows
+test_label=labels(627:926,:);
+test_data=features_sparse(627:926,:);
 libsvmwrite('libsvm_test', test_label, test_data);
 
 %% test data, which includes "testdata"

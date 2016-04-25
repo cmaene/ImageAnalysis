@@ -6,6 +6,8 @@ cd tools
 
 arg_list = argv ();
 fname = arg_list{1};
+nrow = arg_list{2};
+ncol = arg_list{3};
 
 vec=dlmread(fname);
 length(vec)
@@ -15,7 +17,7 @@ unv=unique(vec);
 a=[unv histc(vec,unv)]
 
 max(vec)
-grid=reshape(vec,484,353);
+grid=reshape(vec,ncol,nrow);
 size(grid)
 % flip and rotate the grid
 grid=rot90(grid(:,end:-1:1));
