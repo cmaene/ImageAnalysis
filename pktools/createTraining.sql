@@ -38,6 +38,7 @@ drop table farm;     --3
 drop table building; --4
 drop table railway;  --5
 drop table highway;  --6
+drop table bamboo;   --7
 vacuum;
 -----------------------------------------------------------------------------------------------------
 
@@ -70,7 +71,7 @@ create table forest (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, landuse VARCHAR)
 select AddFDOGeometryColumn('forest', 'geometry', 4326, 6, 2, 'WKB');
 
 --insert rows from existing table where landuse="forest" or natural="wood";
-insert into forest(OGC_FID, landuse, geometry) select OGC_FID, landuse, geometry from multipolygons where landuse="forest" or natural="wood";
+insert into forest(OGC_FID, landuse, geometry) select OGC_FID, landuse, geometry from multipolygons where landuse="forest" or natural="wood" limit 300;
 
 --add a new column - training label
 alter table forest add column label integer;
@@ -106,7 +107,7 @@ create table building (OGC_FID INTEGER PRIMARY KEY AUTOINCREMENT, building VARCH
 select AddFDOGeometryColumn('building', 'geometry', 4326, 6, 2, 'WKB');
 
 --insert rows from existing table where building="yes", limit to 200 features (too many buildings in source);
-insert into building(OGC_FID, building, geometry) select OGC_FID, building, geometry from multipolygons where building="yes" limit 200;
+insert into building(OGC_FID, building, geometry) select OGC_FID, building, geometry from multipolygons where building="yes" limit 300;
 
 --add a new column - training label
 alter table building add column label integer;
@@ -177,6 +178,32 @@ update highway set label=6;
 
 --check to see if labels are created correctly
 select label, count(label), SUM(Area(GeomFromWKB(geometry))) from highway group by label;
+
+-----------------------------------------------------------------------------------------------------
+
+--creating bamboo label
+
+--create table - instead of ".loadshp lines_osm shpline UTF8 4326" (works directly in spatialite)
+CREATE TABLE "bamboo" (
+"OGC_FID" INTEGER PRIMARY KEY AUTOINCREMENT,
+"id" VARCHAR);
+
+--establish Geometry column - note: multipolygons=6
+select AddFDOGeometryColumn('bamboo', 'geometry', 4326, 6, 2, 'WKB');
+
+--import lines shapefile. Note: I had to drop "other_tags" in shp prior to importing
+--otherwise, kept getting "invalid character sequence", something bad in "other_tags"
+create virtual table vbamboo using VirtualShape("KyotoBamboo", "utf-8", 4326);
+
+--insert from the VirtualShape table
+insert into bamboo(id, geometry) select id, geometry from vbamboo;
+
+--add a new column - training label
+alter table bamboo add column label integer;
+update bamboo set label=7;
+
+--check to see if labels are created correctly
+select label, count(label), SUM(Area(GeomFromWKB(geometry))) from bamboo group by label;
 
 -----------------------------------------------------------------------------------------------------
 

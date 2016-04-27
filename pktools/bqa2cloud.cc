@@ -1,7 +1,8 @@
 //code from "Open SOurce Geospatial Tools", Chapter 14.3
 //compile e.g.:  g++ -o bqa2cloud bqa2cloud.cc -I/usr/include/gdal -lgdal
+//optional: sudo cp ./bqa2cloud /usr/bin/ 
 //usage e.g.:    ./bqa2cloud LC81100362015271LGN00_BQA.TIF LC81100362015271LGN00_CLD.TIF
-//output values: 0=not cloud, 1=yes, cloud
+//output values: 0=cloud free, 1=cloudy
 #include <stdlib.h>
 #include <string>
 #include <vector>
@@ -21,7 +22,7 @@ int main(int argc , char **argv){
 		ostringstream stlosError;
 		stlosError <<"usage: "<<argv[0]<<"[-nocloud <value>][-cloud <value>][-cirrus <value>] <bqa_input> <cloud_output>";
 		for(int i=1; i<argc; i++){
-			string stlsOption=argv[i];//converttostd::string
+			string stlsOption=argv[i];//convert to std::string
 			if(stlsOption=="-nocloud"||stlsOption=="--nocloud"){
 				nNoCloud=atoi(argv[++i]);
 			}
