@@ -30,7 +30,9 @@ create view traininglabel as
     union all 
     select label,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10 from railway
     union all 
-    select label,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10 from highway;
+    select label,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10 from highway
+    union all 
+    select label,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10 from bamboo;
 
 .mode csv
 --we don't want the "select ..." statement in the output

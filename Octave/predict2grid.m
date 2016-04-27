@@ -6,8 +6,8 @@ cd tools
 
 arg_list = argv ();
 fname = arg_list{1};
-nrow = arg_list{2};
-ncol = arg_list{3};
+nrow = str2num(arg_list{2});
+ncol = str2num(arg_list{3});
 
 vec=dlmread(fname);
 length(vec)

@@ -21,17 +21,24 @@ clear; close all;
 %% ============ Prepare data from multi-band images ============
 %  Run gdal_translate to create individual band images
 
+arg_list = argv ();
+ntotal = str2num(arg_list{1});
+ntrain=int16(floor(ntotal/3*2)); %split into 2/3 and 1/3
+ntest=ntrain+1;
+
 fprintf('upload data ...\n')
 %%data = load('traininglabel.csv') %%need to skip header
 
 cd temp
-fid=fopen(['landsat8toafall_cf5_b1.bil'],'r');
+fid=fopen(['landsat8toa_b1.bil'],'r');
 landsat8=fread(fid,'float32');
+landsat8(landsat8==0)=NaN; % define NaN/nodata
 size(landsat8)
 for i=2:9
-    fname=["landsat8toafall_cf5_b" num2str(i) ".bil"];
+    fname=["landsat8toa_b" num2str(i) ".bil"];
     fid=fopen(fname,'r');
 	newband=fread(fid,'float32');
+	newband(newband==0)=NaN; % define NaN/nodata
 	landsat8=[landsat8,newband];
 end
 # row, col
@@ -66,13 +73,13 @@ labels = traindata_rsort(:, 1); % labels from the 1st column
 %features = traindata_rsort(:, 2:end); 
 features = traindata_rsort(:, 2:end-2); 
 features_sparse = sparse(features); % features must be in a sparse matrix
-% train = first 626 rows out of 926 - give more for training
-train_label=labels(1:626,:);
-train_data=features_sparse(1:626,:);
+% train = 2/3 of all training data - give more for training
+train_label=labels(1:ntrain,:);
+train_data=features_sparse(1:ntrain,:);
 libsvmwrite('libsvm_train', train_label, train_data);
-% test = next 300 rows
-test_label=labels(627:926,:);
-test_data=features_sparse(627:926,:);
+% test = rest of 1/3 for validation
+test_label=labels(ntest:ntotal,:);
+test_data=features_sparse(ntest:ntotal,:);
 libsvmwrite('libsvm_test', test_label, test_data);
 
 %% test data, which includes "testdata"
@@ -80,5 +87,6 @@ load('landsat8.mat');
 [N2,M2]=size(landsat8);
 landsat8_label=zeros(N2,1);
 landsat8_sparse = sparse(landsat8); % features must be in a sparse matrix
+% NaN are recorded as "nan" in the output
 libsvmwrite('libsvm_satellite', landsat8_label, landsat8_sparse);
 
